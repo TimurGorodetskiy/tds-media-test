@@ -4,7 +4,7 @@ import {useNavigate, useParams} from "react-router-dom";
 import {toast} from "sonner";
 // componenst
 import {UserForm} from "@/components/UserForm/UserForm.tsx";
-import {Spinner} from "@/components/Spinner/Spinner.tsx";
+import {Spinner} from "@/components/shared/Spinner/Spinner.tsx";
 import {Separator} from "@/components/ui/separator.tsx";
 import {Button} from "@/components/ui/button.tsx";
 

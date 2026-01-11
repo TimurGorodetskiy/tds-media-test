@@ -6,11 +6,12 @@ import {UserService} from "@/services/userService.ts";
 // types
 import type {User} from "@/types/user.ts";
 // configs
-import {ITEMS_PER_PAGE} from "@/components/UserList/config.ts";
+import {PAGINATION_CONFIG} from "@/components/shared/Pagination/config.ts";
 
 export const useUsers = () => {
     const [users, setUsers] = useState<User[]>([]);
-    const [page, setPage] = useState(1);
+    const [page, setPage] = useState(PAGINATION_CONFIG.DEFAULT_PAGE);
+    const [limit, setLimit] = useState(PAGINATION_CONFIG.DEFAULT_LIMIT);
     const [sortConfig, setSortConfig] = useState<{ key: string, order: 'asc' | 'desc' }>(
         {key: 'id', order: 'asc'},
     );
@@ -22,7 +23,7 @@ export const useUsers = () => {
 
         try {
             const data = await UserService.getAll(
-                {page, limit: ITEMS_PER_PAGE, sortBy: sortConfig.key, orderBy: sortConfig.order},
+                {page, limit: limit, sortBy: sortConfig.key, orderBy: sortConfig.order},
             );
             setUsers(data);
         } catch {
@@ -55,7 +56,18 @@ export const useUsers = () => {
 
     useEffect(() => {
         fetchUsers();
-    }, [page, sortConfig]);
+    }, [page, sortConfig, limit]);
 
-    return {users, isLoading, refetchUsers: fetchUsers, handleDelete, page, setPage, sortConfig, requestSort};
+    return {
+        users,
+        isLoading,
+        refetchUsers: fetchUsers,
+        handleDelete,
+        page,
+        setPage,
+        sortConfig,
+        requestSort,
+        limit,
+        setLimit
+    };
 }

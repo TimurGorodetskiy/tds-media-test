@@ -1,18 +1,18 @@
 // libraries
-import { useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import {useEffect} from "react";
+import {useFieldArray, useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
 // components
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// Types
-import type { User } from "@/types/user.ts";
-// Validation
-import { type UserFormData, userSchema } from "@/features/users/schemas/UserSchema.ts";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {Label} from "@/components/ui/label";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+// types
+import type {User} from "@/types/user.ts";
+// validation
+import {type UserFormData, userSchema} from "@/features/users/schemas/UserSchema.ts";
 // icons
-import { Plus, Trash2, Save, UserPlus } from "lucide-react";
+import {Plus, Trash2, Save, UserPlus} from "lucide-react";
 
 interface UserFormProps {
     initialData?: User;
@@ -20,16 +20,16 @@ interface UserFormProps {
     isLoading: boolean;
 }
 
-export const UserForm = ({ initialData, onSubmit, isLoading }: UserFormProps) => {
-    const { register, reset, control, handleSubmit, formState: { errors } } = useForm<UserFormData>({
-        mode:"onBlur",
+export const UserForm = ({initialData, onSubmit, isLoading}: UserFormProps) => {
+    const {register, reset, control, handleSubmit, formState: {errors}} = useForm<UserFormData>({
+        mode: "onBlur",
         resolver: zodResolver(userSchema),
         defaultValues: initialData
-            ? { ...initialData, skills: initialData.skills.map(skill => ({ value: skill })) }
-            : { skills: [{ value: '' }] }
+            ? {...initialData, skills: initialData.skills.map(skill => ({value: skill}))}
+            : {skills: [{value: ''}]}
     });
 
-    const { fields, append, remove } = useFieldArray({
+    const {fields, append, remove} = useFieldArray({
         control,
         name: 'skills'
     });
@@ -38,7 +38,7 @@ export const UserForm = ({ initialData, onSubmit, isLoading }: UserFormProps) =>
         if (initialData) {
             reset({
                 ...initialData,
-                skills: initialData.skills.map(skill => ({ value: skill }))
+                skills: initialData.skills.map(skill => ({value: skill}))
             });
         }
     }, [initialData, reset]);
@@ -104,7 +104,7 @@ export const UserForm = ({ initialData, onSubmit, isLoading }: UserFormProps) =>
                                         onClick={() => remove(index)}
                                         className="text-red-500 hover:text-red-700 hover:bg-red-50"
                                     >
-                                        <Trash2 className="h-4 w-4" />
+                                        <Trash2 className="h-4 w-4"/>
                                     </Button>
                                 </div>
                             ))}
@@ -121,9 +121,9 @@ export const UserForm = ({ initialData, onSubmit, isLoading }: UserFormProps) =>
                             variant="outline"
                             size="sm"
                             className="w-full mt-2 border-dashed"
-                            onClick={() => append({ value: '' })}
+                            onClick={() => append({value: ''})}
                         >
-                            <Plus className="h-4 w-4 mr-2" /> Добавить навык
+                            <Plus className="h-4 w-4 mr-2"/> Добавить навык
                         </Button>
                     </div>
                     <Button
@@ -134,9 +134,9 @@ export const UserForm = ({ initialData, onSubmit, isLoading }: UserFormProps) =>
                         {isLoading ? (
                             "Загрузка..."
                         ) : initialData ? (
-                            <><Save className="h-4 w-4 mr-2" /> Сохранить изменения</>
+                            <><Save className="h-4 w-4 mr-2"/> Сохранить изменения</>
                         ) : (
-                            <><UserPlus className="h-4 w-4 mr-2" /> Создать пользователя</>
+                            <><UserPlus className="h-4 w-4 mr-2"/> Создать пользователя</>
                         )}
                     </Button>
                 </form>

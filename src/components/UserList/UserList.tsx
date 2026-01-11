@@ -11,25 +11,23 @@ import {
 } from "@/components/ui/alert-dialog";
 import {Button} from '@/components/ui/button';
 import {Badge} from '@/components/ui/badge';
-import {Spinner} from "@/components/Spinner/Spinner.tsx";
+import {Spinner} from "@/components/shared/Spinner/Spinner.tsx";
+import {Pagination} from "@/components/shared/Pagination/Pagination.tsx";
 //hooks
 import {useUsers} from "@/hooks/useUsers.ts";
 // icons
 import {
     Trash2,
     Pencil,
-    ChevronLeft,
-    ChevronRight,
     ChevronUp,
     ChevronDown,
     ChevronsUpDown
 } from 'lucide-react';
-import {ITEMS_PER_PAGE} from "@/components/UserList/config.ts";
 
 
 export const UserList = () => {
     const navigate = useNavigate();
-    const {users, isLoading, handleDelete, sortConfig, requestSort, setPage, page} = useUsers();
+    const {users, isLoading, handleDelete, sortConfig, requestSort, setPage, page, setLimit, limit} = useUsers();
 
     const getSortIcon = (key: string) => {
         if (sortConfig.key !== key) return <ChevronsUpDown className="ml-2 h-4 w-4 opacity-50"/>;
@@ -140,34 +138,16 @@ export const UserList = () => {
                     ))}
                 </TableBody>
             </Table>
+            {!isLoading && users.length > 0 && (
+                <Pagination
+                    page={page}
+                    limit={limit}
+                    totalItems={users.length}
+                    setPage={setPage}
+                    setLimit={setLimit}
+                />
+            )}
 
-            <div className="flex items-center justify-between mt-6 px-2">
-                <p className="text-sm text-muted-foreground font-medium">
-                    Страница <span className="text-foreground">{page}</span>
-                </p>
-                <div className="flex gap-2">
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={page === 1}
-                        onClick={() => setPage(prev => prev - 1)}
-                        className="h-8"
-                    >
-                        <ChevronLeft className="h-4 w-4 mr-1"/>
-                        Назад
-                    </Button>
-                    <Button
-                        variant="outline"
-                        size="sm"
-                        disabled={users.length < ITEMS_PER_PAGE}
-                        onClick={() => setPage(prev => prev + 1)}
-                        className="h-8"
-                    >
-                        Вперед
-                        <ChevronRight className="h-4 w-4 ml-1"/>
-                    </Button>
-                </div>
-            </div>
         </div>
     );
 };
