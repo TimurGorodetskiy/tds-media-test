@@ -26,9 +26,16 @@ export const Pagination = ({page, limit, totalItems, setPage, setLimit}: Paginat
 
     return (
         <div
-            className="flex items-center justify-between mt-6 px-2 animate-in fade-in slide-in-from-bottom-2 duration-500">
-            <div className="flex items-center gap-2">
-                <span className="text-sm text-muted-foreground whitespace-nowrap">Строк на странице:</span>
+            className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 px-2 animate-in fade-in slide-in-from-bottom-2 duration-500"
+        >
+            <div className="flex items-center gap-2 order-2 sm:order-1">
+                <span className="text-sm text-muted-foreground whitespace-nowrap hidden min-[400px]:inline">
+                    Строк на странице:
+                </span>
+                <span className="text-sm text-muted-foreground whitespace-nowrap inline min-[400px]:hidden">
+                    Строк:
+                </span>
+
                 <Select
                     value={String(limit)}
                     onValueChange={(value) => {
@@ -48,13 +55,12 @@ export const Pagination = ({page, limit, totalItems, setPage, setLimit}: Paginat
                     </SelectContent>
                 </Select>
             </div>
-
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 order-1 sm:order-2">
                 <Button
                     variant="outline"
                     size="icon"
                     className="h-8 w-8 cursor-pointer"
-                    disabled={page === 1}
+                    disabled={page === PAGINATION_CONFIG.DEFAULT_PAGE}
                     onClick={() => setPage(page - 1)}
                 >
                     <ChevronLeft className="h-4 w-4"/>
@@ -67,26 +73,22 @@ export const Pagination = ({page, limit, totalItems, setPage, setLimit}: Paginat
                                 variant="outline"
                                 size="sm"
                                 className="h-8 w-8 p-0"
-                                onClick={() => setPage(1)}
+                                onClick={() => setPage(PAGINATION_CONFIG.DEFAULT_PAGE)}
                             >
-                                1
+                                {PAGINATION_CONFIG.DEFAULT_PAGE}
                             </Button>
                             <span className="text-muted-foreground text-xs px-1">...</span>
                         </>
                     )}
-
-                    {[-1, 0, 1].map((offset) => {
+                    {
+                        [-1, 0, 1].map((offset) => {
                         const neighborPage = page + offset;
 
                         const isPageValid = neighborPage >= 1;
-                        if (!isPageValid) {
-                            return null;
-                        }
+                        if (!isPageValid) return null;
 
                         const isLastPageReached = offset === 1 && totalItems < limit;
-                        if (isLastPageReached) {
-                            return null;
-                        }
+                        if (isLastPageReached) return null;
 
                         return (
                             <Button
@@ -107,7 +109,6 @@ export const Pagination = ({page, limit, totalItems, setPage, setLimit}: Paginat
                         </>
                     )}
                 </div>
-
                 <Button
                     variant="outline"
                     size="icon"
